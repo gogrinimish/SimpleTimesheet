@@ -1,0 +1,115 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+env:
+  XCODE_VERSION: '16.0'
+
+jobs:
+  build-release:
+    name: Build Release
+    runs-on: macos-14
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Get Version from Tag
+      id: version
+      run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+    
+    - name: Select Xcode
+      run: sudo xcode-select -s /Applications/Xcode_${{ env.XCODE_VERSION }}.app
+    
+    - name: Build iOS Release
+      run: |
+        xcodebuild archive \
+          -project SimpleTimesheet.xcodeproj \
+          -scheme SimpleTimesheet \
+          -destination 'generic/platform=iOS' \
+          -archivePath build/SimpleTimesheet-iOS.xcarchive \
+          CODE_SIGN_IDENTITY="" \
+          CODE_SIGNING_REQUIRED=NO \
+          CODE_SIGNING_ALLOWED=NO \
+          MARKETING_VERSION=${{ steps.version.outputs.VERSION }} \
+          | xcpretty --color
+    
+    - name: Build macOS Release
+      run: |
+        xcodebuild archive \
+          -project SimpleTimesheet.xcodeproj \
+          -scheme SimpleTimesheetMac \
+          -destination 'generic/platform=macOS' \
+          -archivePath build/SimpleTimesheet-macOS.xcarchive \
+          CODE_SIGN_IDENTITY="" \
+          CODE_SIGNING_REQUIRED=NO \
+          CODE_SIGNING_ALLOWED=NO \
+          MARKETING_VERSION=${{ steps.version.outputs.VERSION }} \
+          | xcpretty --color
+    
+    - name: Package macOS App
+      run: |
+        mkdir -p build/release
+        cp -R build/SimpleTimesheet-macOS.xcarchive/Products/Applications/SimpleTimesheetMac.app build/release/
+        cd build/release
+        zip -r "SimpleTimesheet-macOS-${{ steps.version.outputs.VERSION }}.zip" SimpleTimesheetMac.app
+    
+    - name: Package iOS App (Unsigned)
+      run: |
+        mkdir -p build/release/Payload
+        cp -R build/SimpleTimesheet-iOS.xcarchive/Products/Applications/SimpleTimesheet.app build/release/Payload/
+        cd build/release
+        zip -r "SimpleTimesheet-iOS-${{ steps.version.outputs.VERSION }}-unsigned.ipa" Payload
+        rm -rf Payload
+    
+    - name: Generate Release Notes
+      id: notes
+      run: |
+        echo "NOTES<<EOF" >> $GITHUB_OUTPUT
+        echo "## SimpleTimesheet v${{ steps.version.outputs.VERSION }}" >> $GITHUB_OUTPUT
+        echo "" >> $GITHUB_OUTPUT
+        echo "### Downloads" >> $GITHUB_OUTPUT
+        echo "" >> $GITHUB_OUTPUT
+        echo "| Platform | File | Notes |" >> $GITHUB_OUTPUT
+        echo "|----------|------|-------|" >> $GITHUB_OUTPUT
+        echo "| macOS | SimpleTimesheet-macOS-${{ steps.version.outputs.VERSION }}.zip | Unsigned app, may require allowing in Security settings |" >> $GITHUB_OUTPUT
+        echo "| iOS | SimpleTimesheet-iOS-${{ steps.version.outputs.VERSION }}-unsigned.ipa | Unsigned IPA for sideloading (requires AltStore, Sideloadly, or similar) |" >> $GITHUB_OUTPUT
+        echo "" >> $GITHUB_OUTPUT
+        echo "### Installation" >> $GITHUB_OUTPUT
+        echo "" >> $GITHUB_OUTPUT
+        echo "**macOS:**" >> $GITHUB_OUTPUT
+        echo "1. Download and unzip the macOS app" >> $GITHUB_OUTPUT
+        echo "2. Move to Applications folder" >> $GITHUB_OUTPUT
+        echo "3. Right-click and select 'Open' to bypass Gatekeeper on first launch" >> $GITHUB_OUTPUT
+        echo "" >> $GITHUB_OUTPUT
+        echo "**iOS:**" >> $GITHUB_OUTPUT
+        echo "1. Download the IPA file" >> $GITHUB_OUTPUT
+        echo "2. Use AltStore, Sideloadly, or similar tool to install" >> $GITHUB_OUTPUT
+        echo "3. Trust the developer in Settings > General > Device Management" >> $GITHUB_OUTPUT
+        echo "" >> $GITHUB_OUTPUT
+        echo "---" >> $GITHUB_OUTPUT
+        echo "EOF" >> $GITHUB_OUTPUT
+    
+    - name: Upload Build Artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: release-artifacts-${{ steps.version.outputs.VERSION }}
+        path: |
+          build/release/*.zip
+          build/release/*.ipa
+        retention-days: 90
+    
+    - name: Create GitHub Release
+      uses: softprops/action-gh-release@v2
+      with:
+        files: |
+          build/release/SimpleTimesheet-macOS-${{ steps.version.outputs.VERSION }}.zip
+          build/release/SimpleTimesheet-iOS-${{ steps.version.outputs.VERSION }}-unsigned.ipa
+        body: ${{ steps.notes.outputs.NOTES }}
+        draft: true
+        generate_release_notes: true
+        append_body: true
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

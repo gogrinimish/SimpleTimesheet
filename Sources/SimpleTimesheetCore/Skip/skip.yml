@@ -1,0 +1,6 @@
+# Skip configuration for SimpleTimesheetCore
+# https://skip.tools/docs/
+
+# Module configuration
+module:
+  name: SimpleTimesheetCore

@@ -1,0 +1,72 @@
+# Xcode
+build/
+DerivedData/
+*.xcworkspace
+!*.xcodeproj/project.xcworkspace/
+xcuserdata/
+*.xccheckout
+*.moved-aside
+*.hmap
+*.ipa
+*.dSYM.zip
+*.dSYM
+*.xcuserstate
+
+# Swift Package Manager
+.build/
+.swiftpm/
+Packages/
+Package.pins
+Package.resolved
+
+# CocoaPods
+Pods/
+
+# Skip/Android
+.gradle/
+local.properties
+*.iml
+.idea/
+captures/
+Android/app/build/
+Android/build/
+
+# macOS
+.DS_Store
+*.swp
+*~.nib
+
+# Secrets - NEVER commit these
+*.env
+.env.*
+secrets.json
+credentials.json
+*.pem
+*.p12
+*.key
+
+# User-specific files
+*.xcuserdatad/
+
+# Archives
+*.xcarchive
+
+# Playgrounds
+timeline.xctimeline
+playground.xcworkspace
+
+# Testing
+*.gcno
+*.gcda
+coverage.xml
+*.coverage
+
+# Fastlane
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots
+fastlane/test_output
+
+# Temporary files
+*.tmp
+*.temp

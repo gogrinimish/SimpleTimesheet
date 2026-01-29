@@ -1,0 +1,48 @@
+# Skip Configuration for SimpleTimesheet
+# https://skip.tools/docs/
+
+# Project configuration
+project:
+  name: SimpleTimesheet
+  bundle_id: com.simpletimesheet.app
+  version: 1.0.0
+  
+# Android-specific configuration
+android:
+  min_sdk: 26
+  target_sdk: 34
+  compile_sdk: 34
+  
+  # Application ID for Android
+  application_id: com.simpletimesheet.app
+  
+  # Permissions
+  permissions:
+    - android.permission.POST_NOTIFICATIONS
+    - android.permission.RECEIVE_BOOT_COMPLETED
+    - android.permission.SCHEDULE_EXACT_ALARM
+    - android.permission.READ_EXTERNAL_STORAGE
+    - android.permission.WRITE_EXTERNAL_STORAGE
+  
+  # Features
+  features:
+    - name: android.hardware.touchscreen
+      required: false
+
+# Skip transpilation settings  
+skip:
+  # Modules to transpile
+  modules:
+    - SimpleTimesheetCore
+    
+  # Files to exclude from transpilation
+  exclude:
+    - "**/*Tests.swift"
+    - "**/Preview Content/**"
+    - "SimpleTimesheetMac/**"  # macOS-only code
+    - "SimpleTimesheetWidget/**"  # iOS widgets (Android has different implementation)
+    
+  # Platform-specific code handling
+  platform_code:
+    # Use #if SKIP for Android-specific implementations
+    enabled: true
