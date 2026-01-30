@@ -173,6 +173,28 @@ final class TimesheetTests: XCTestCase {
         XCTAssertFalse(body.contains("{{periodEnd}}"))
     }
     
+    /// README: Timesheet generation compiles entries into formatted email body with entriesSummary
+    func testTimesheetGenerateEmailBodyIncludesEntriesSummary() {
+        let now = Date()
+        let entries: [TimeEntry] = [
+            TimeEntry(
+                startTime: now.addingTimeInterval(-3600),
+                endTime: now,
+                description: "Worked on README"
+            )
+        ]
+        let timesheet = Timesheet(
+            periodStart: now.addingTimeInterval(-86400 * 7),
+            periodEnd: now,
+            entries: entries
+        )
+        let template = "Summary: {{entriesSummary}}"
+        let body = timesheet.generateEmailBody(template: template, userName: "Test User")
+        
+        XCTAssertTrue(body.contains("Worked on README"), "entriesSummary should include entry descriptions")
+        XCTAssertFalse(body.contains("{{entriesSummary}}"), "entriesSummary placeholder should be replaced")
+    }
+    
     // MARK: - Codable Tests
     
     func testTimesheetCodable() throws {

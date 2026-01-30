@@ -11,7 +11,7 @@ final class AppConfigurationTests: XCTestCase {
         XCTAssertTrue(config.storageFolder.isEmpty)
         XCTAssertEqual(config.timezoneIdentifier, TimeZone.current.identifier)
         XCTAssertEqual(config.notificationTime, "17:00")
-        XCTAssertEqual(config.notificationDays, [6]) // Friday
+        XCTAssertEqual(config.notificationDays, [6]) // Friday (1=Sun … 7=Sat per README)
         XCTAssertFalse(config.emailTemplate.isEmpty)
         XCTAssertTrue(config.approverEmail.isEmpty)
         XCTAssertTrue(config.userName.isEmpty)
@@ -202,6 +202,12 @@ final class AppConfigurationTests: XCTestCase {
         XCTAssertTrue(TimesheetPeriod.allCases.contains(.weekly))
         XCTAssertTrue(TimesheetPeriod.allCases.contains(.biweekly))
         XCTAssertTrue(TimesheetPeriod.allCases.contains(.monthly))
+    }
+    
+    /// README: notificationDays uses 1=Sunday … 7=Saturday; [6] = Friday
+    func testNotificationDaysFridayIsSix() {
+        let config = AppConfiguration()
+        XCTAssertEqual(config.notificationDays, [6], "Default reminder day should be Friday (6)")
     }
     
     // MARK: - Default Email Template Tests

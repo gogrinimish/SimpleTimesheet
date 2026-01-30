@@ -88,12 +88,11 @@ All configuration is stored in JSON files within your chosen storage folder, ena
 
 ```
 YourTimesheetFolder/
-├── config.json          # App configuration
-├── timesheets/          # Generated timesheets
-│   ├── 2026-01.json
-│   ├── 2026-02.json
+├── config.json              # App configuration
+├── timesheets/              # Generated timesheets (one file per period)
+│   ├── 2026-01-<id>.json    # e.g. 2026-01-abc12345.json
 │   └── ...
-└── time-entries/        # Raw time entry data
+└── time-entries/            # Raw time entry data
     └── entries.json
 ```
 
@@ -104,9 +103,9 @@ YourTimesheetFolder/
 | `storageFolder` | Path to the folder for storing timesheets |
 | `timezone` | Timezone for timesheet calculations (e.g., "America/New_York") |
 | `notificationTime` | Time to send reminder notification (e.g., "17:00") |
-| `emailTemplate` | Custom email template for timesheet submissions |
+| `emailTemplate` | Custom email template for timesheet submissions (placeholders: `{{userName}}`, `{{periodStart}}`, `{{periodEnd}}`, `{{totalHours}}`, `{{entriesSummary}}`) |
 | `approverEmail` | Email address of the timesheet approver |
-| `notificationDays` | Days of week to send notifications (e.g., [5] for Friday) |
+| `notificationDays` | Days of week to send notifications (1=Sunday … 7=Saturday; e.g. [6] for Friday) |
 
 ## Usage
 

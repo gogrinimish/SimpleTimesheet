@@ -42,6 +42,31 @@ final class StorageServiceTests: XCTestCase {
         XCTAssertTrue(FileManager.default.fileExists(atPath: entriesFolder.path))
     }
     
+    /// README: Verifies folder structure (config.json, timesheets/, time-entries/entries.json)
+    func testStorageFolderStructureMatchesReadme() throws {
+        try storageService.setStorageFolder(testDirectory.path)
+        
+        let configFile = testDirectory.appendingPathComponent("config.json")
+        let timesheetsFolder = testDirectory.appendingPathComponent("timesheets")
+        let entriesFile = testDirectory.appendingPathComponent("time-entries").appendingPathComponent("entries.json")
+        
+        XCTAssertTrue(FileManager.default.fileExists(atPath: timesheetsFolder.path),
+                      "timesheets/ folder should exist")
+        XCTAssertTrue(FileManager.default.fileExists(atPath: testDirectory.appendingPathComponent("time-entries").path),
+                      "time-entries/ folder should exist")
+        
+        var config = AppConfiguration(storageFolder: testDirectory.path)
+        config.userName = "Test"
+        config.approverEmail = "test@example.com"
+        try storageService.saveConfiguration(config)
+        XCTAssertTrue(FileManager.default.fileExists(atPath: configFile.path),
+                      "config.json should exist at storage root")
+        
+        try storageService.saveTimeEntries([TimeEntry(startTime: Date(), description: "Test")])
+        XCTAssertTrue(FileManager.default.fileExists(atPath: entriesFile.path),
+                      "time-entries/entries.json should exist after saving entries")
+    }
+    
     func testIsValidStorageFolder() {
         XCTAssertTrue(storageService.isValidStorageFolder(testDirectory.path))
     }

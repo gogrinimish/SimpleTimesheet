@@ -169,6 +169,21 @@ final class EmailServiceTests: XCTestCase {
         XCTAssertTrue(csv.contains("0.00"))
     }
     
+    /// README: CSV export includes period description for timesheet context
+    func testExportAsCSVContainsPeriodLine() {
+        let start = Date()
+        let end = start.addingTimeInterval(86400 * 7)
+        let timesheet = Timesheet(
+            periodStart: start,
+            periodEnd: end,
+            entries: []
+        )
+        let csv = emailService.exportAsCSV(timesheet)
+        
+        XCTAssertTrue(csv.contains("Period:"), "CSV should include Period line per README")
+        XCTAssertTrue(csv.contains(timesheet.periodDescription), "Period line should contain period description")
+    }
+    
     // MARK: - Text Export Tests
     
     func testExportAsText() {
