@@ -1,0 +1,63 @@
+name: Security Analysis
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+  schedule:
+    # Run weekly on Sundays at midnight
+    - cron: '0 0 * * 0'
+
+jobs:
+  semgrep:
+    name: Semgrep Security Scan
+    runs-on: ubuntu-latest
+    
+    container:
+      image: semgrep/semgrep
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Run Semgrep
+      run: |
+        semgrep ci \
+          --config auto \
+          --config p/swift \
+          --config p/secrets \
+          --config p/security-audit \
+          --sarif --output semgrep-results.sarif \
+          || true
+      env:
+        SEMGREP_APP_TOKEN: ${{ secrets.SEMGREP_APP_TOKEN }}
+    
+    - name: Upload SARIF results
+      uses: github/codeql-action/upload-sarif@v3
+      with:
+        sarif_file: semgrep-results.sarif
+      if: always()
+      continue-on-error: true
+    
+    - name: Upload Semgrep results as artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: semgrep-results
+        path: semgrep-results.sarif
+        retention-days: 30
+      if: always()
+
+  dependency-review:
+    name: Dependency Review
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Dependency Review
+      uses: actions/dependency-review-action@v4
+      with:
+        fail-on-severity: high
+        allow-licenses: MIT, Apache-2.0, BSD-2-Clause, BSD-3-Clause, ISC
+      continue-on-error: true
