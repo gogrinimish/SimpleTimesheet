@@ -116,6 +116,45 @@ a:hover {
   color: var(--muted);
 }
 
+/* Screenshots */
+#screenshots h3 {
+  margin: 1.5rem 0 0.75rem;
+}
+
+#screenshots h3:first-of-type {
+  margin-top: 0;
+}
+
+.screenshot-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.screenshot-grid-3 {
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+
+#screenshots figure {
+  margin: 0;
+  padding: 0;
+}
+
+#screenshots figure img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+
+#screenshots figcaption {
+  margin-top: 0.5rem;
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+
 footer {
   padding: 2rem 0;
   border-top: 1px solid var(--border);

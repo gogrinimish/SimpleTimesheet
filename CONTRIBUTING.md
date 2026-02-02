@@ -10,7 +10,7 @@ By participating in this project, you agree to maintain a respectful and inclusi
 
 ### Reporting Bugs
 
-1. Check if the bug has already been reported in [Issues](https://github.com/yourusername/SimpleTimesheet/issues)
+1. Check if the bug has already been reported in [Issues](https://github.com/gogrinimish/SimpleTimesheet/issues)
 2. If not, create a new issue with:
    - Clear, descriptive title
    - Steps to reproduce
@@ -55,7 +55,7 @@ skip checkup
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/SimpleTimesheet.git
+git clone https://github.com/gogrinimish/SimpleTimesheet.git
 cd SimpleTimesheet
 
 # Open in Xcode
@@ -155,7 +155,7 @@ test: Add unit tests for TimeEntry
 
 ## Getting Help
 
-- Open a [Discussion](https://github.com/yourusername/SimpleTimesheet/discussions)
+- Open a [Discussion](https://github.com/gogrinimish/SimpleTimesheet/discussions)
 - Check existing documentation
 - Review closed issues
 

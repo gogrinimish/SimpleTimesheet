@@ -4,43 +4,50 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Platform](https://img.shields.io/badge/platform-macOS%20%7C%20iOS-blue.svg)](https://github.com/gogrinimish/SimpleTimesheet)
 
-A cross-platform time tracking application for macOS, iOS, and Android. Track your hours, build timesheets, and email them to approvers with one click.
+A local-first, cross-platform time tracking app for macOS, iOS, and Android (planned). Track your hours, generate timesheets, and email them to approvers — all without accounts, servers, or data lock-in.
 
 **Learn more:** [SimpleTimesheet website](https://gogrinimish.github.io/SimpleTimesheet/)
 
 ## Screenshots
 
-*Add PNGs to `docs/screenshots/` as `macos-menubar.png`, `ios-timer.png`, and `timesheet-preview.png` to show them below.*
+### macOS Menu Bar
 
-| macOS Menu Bar | iOS Timer | Timesheet Preview |
-|----------------|-----------|-------------------|
-| ![macOS menu bar](docs/screenshots/macos-menubar.png) | ![iOS timer](docs/screenshots/ios-timer.png) | ![Timesheet](docs/screenshots/timesheet-preview.png) |
+| Menu bar popover | Menu bar icon (timer running) |
+|------------------|--------------------------------|
+| ![macOS menu bar](docs/screenshots/macos-menubar.png) | ![Menu bar icon for running timer](docs/screenshots/Menu%20Bar%20Icon%20for%20Running%20Timer.png) |
+
+### Timer
+
+| Timer running | Timesheet preview |
+|---------------|-------------------|
+| ![Timer running state](docs/screenshots/Timer%20Running%20State.png) | ![Timesheet preview](docs/screenshots/timesheet-preview.png) |
+
+### Settings
+
+| Folder & timezone | Email template | Send reminder |
+|-------------------|-----------------|---------------|
+| ![Settings – folder and timezone](docs/screenshots/Settings%20Pane%201%20-%20Folder%20and%20Timezone%20Setup.png) | ![Settings – email template](docs/screenshots/Settings%20Pane%202%20-%20Email%20Template.png) | ![Settings – timesheet reminder](docs/screenshots/Settings%20Pane%203%20-%20Timesheet%20Send%20Reminder.png) |
+
+### Email
+
+| Embedded timesheet email draft |
+|-------------------------------|
+| ![Embedded timesheet email draft](docs/screenshots/Embedded%20Timesheet%20Email%20Draft.png) |
 
 ## Features
 
 ### Core Functionality
-- **Quick Time Tracking**: Start and stop the clock with a single tap/click
-- **Work Descriptions**: Add descriptions when stopping the clock to document what was worked on
-- **Timesheet Generation**: Automatically compile tracked time into formatted timesheets
-- **Email Integration**: Send timesheets to approvers with customizable email templates
-- **Cross-Device Sync**: Store data in cloud folders (iCloud, Google Drive, OneDrive) for seamless sync
+- **Quick Time Tracking**: Start and stop the clock with a single tap or click
+- **Work Descriptions**: Add notes when you stop the clock to capture what you worked on
+- **Timesheet Generation**: Automatically compile tracked time into clean, ready-to-send timesheets
+- **Email Integration**: Generate emails to approvers with embedded timesheets or attachments
+- **Cross-Device Sync**: Keep data in a shared folder (iCloud, Google Drive, OneDrive) for seamless multi-device sync
 
 ### Platform-Specific Features
+- **macOS**: Menu bar access, keyboard shortcuts, and notifications
+- **iOS**: Widgets, long-press actions, and notifications
+- **Android**: PLANNED
 
-#### macOS
-- Menu bar app for quick access
-- Keyboard shortcuts for start/stop
-- Native notifications
-
-#### iOS
-- Home screen widgets
-- Long-press quick actions
-- Push notifications for timesheet reminders
-
-#### Android
-- Home screen widgets
-- App shortcuts for quick actions
-- Notifications for timesheet reminders
 
 ## Installation
 
@@ -134,11 +141,13 @@ YourTimesheetFolder/
 
 ## Privacy
 
-SimpleTimesheet is designed with privacy in mind:
-- **No cloud services required**: All data stays on your devices or your chosen cloud storage
-- **No analytics or tracking**: The app doesn't collect any usage data
-- **No account required**: Works entirely offline
-- **Open source**: Full transparency into how your data is handled
+
+SimpleTimesheet is built from the ground up to be local-first and privacy-preserving:
+- **Your data, your files**: All data is stored as files in a folder you control
+- **No servers, no accounts**: The app works fully offline and never requires sign-ups
+- **Bring your own sync**: Use iCloud, Google Drive, or OneDrive to sync across devices
+- **No analytics, no tracking**: Nothing is collected, measured, or phoned home
+- **Open source by design**: Inspect the code and see exactly how your data is handled
 
 ## Feedback & Bugs
 
@@ -177,9 +186,7 @@ Contributions are welcome! Please read our [Contributing Guidelines](CONTRIBUTIN
 
 If SimpleTimesheet is useful to you, you can support its development:
 
-[![Buy Me A Coffee](https://img.shields.io/badge/Buy_Me_A_Coffee-FFDD00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black)](https://www.buymeacoffee.com/YOUR_USERNAME)
-
-*Replace `YOUR_USERNAME` with your [Buy Me a Coffee](https://www.buymeacoffee.com) username, or use another link (e.g. Ko-fi, GitHub Sponsors).*
+[![Buy Me A Coffee](https://img.shields.io/badge/Buy_Me_A_Coffee-FFDD00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black)](https://buymeacoffee.com/hwrxt65o5i)
 
 ## License
 

@@ -306,7 +306,7 @@ struct AboutView: View {
             Text("Version 1.0.0")
                 .foregroundStyle(.secondary)
             
-            Text("A simple, privacy-focused time tracking app that works across macOS, iOS, and Android.")
+            Text("A simple, local-first time tracking app that works across macOS, iOS, and Android — with your data stored in files you control.")
                 .multilineTextAlignment(.center)
                 .foregroundStyle(.secondary)
                 .padding(.horizontal)
@@ -314,7 +314,8 @@ struct AboutView: View {
             Spacer()
             
             VStack(spacing: 8) {
-                Link("View on GitHub", destination: URL(string: "https://github.com/yourusername/SimpleTimesheet")!)
+                Link("View on GitHub", destination: URL(string: "https://github.com/gogrinimish/SimpleTimesheet")!)
+                Link("Buy Me a Coffee", destination: URL(string: "https://buymeacoffee.com/hwrxt65o5i")!)
                 
                 Text("Open Source • MIT License")
                     .font(.caption)

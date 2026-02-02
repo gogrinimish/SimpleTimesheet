@@ -21,6 +21,8 @@ public final class TimeTrackingViewModel: ObservableObject {
     @Published public private(set) var allEntries: [TimeEntry] = []
     @Published public private(set) var currentEntry: TimeEntry?
     @Published public var errorMessage: String?
+    /// Set by app when opened via widget "stop" URL to show the stop-timer sheet (iOS).
+    @Published public var showStopDialogFromWidget: Bool = false
     
     private var timerCancellable: AnyCancellable?
     private let calendar: Calendar
@@ -72,6 +74,11 @@ public final class TimeTrackingViewModel: ObservableObject {
         return String(format: "%dm", minutes)
     }
     
+    /// True when storage folder is set (iOS setup flow).
+    public var isSetupComplete: Bool {
+        storageService.getStorageFolderURL() != nil
+    }
+    
     // MARK: - Init
     
     public init(
@@ -117,9 +124,31 @@ public final class TimeTrackingViewModel: ObservableObject {
             try storageService.setStorageFolder(path)
             configuration = try storageService.loadConfiguration()
             configuration.storageFolder = path
-            allEntries = try storageService.loadTimeEntries()
+            let loaded = try storageService.loadTimeEntries()
+            applyLoadedEntries(loaded)
         } catch {
             errorMessage = error.localizedDescription
+        }
+    }
+    
+    /// Splits loaded entries into completed (allEntries) and in-progress (currentEntry).
+    /// When another device started the timer, the in-progress entry is in storage with endTime == nil.
+    private func applyLoadedEntries(_ entries: [TimeEntry]) {
+        let inProgressList = entries.filter { $0.endTime == nil }
+        let completed = entries.filter { $0.endTime != nil }
+        // At most one in-progress; use the most recent by startTime (e.g. from macOS).
+        let active = inProgressList.max(by: { $0.startTime < $1.startTime })
+        // Any other in-progress entries are stale; treat as 0-duration so they don't inflate totals.
+        let staleInProgress = inProgressList.filter { $0.id != active?.id }
+        let fixedStale = staleInProgress.map { entry -> TimeEntry in
+            var e = entry
+            e.endTime = e.startTime
+            return e
+        }
+        allEntries = (completed + fixedStale).sorted { $0.startTime > $1.startTime }
+        currentEntry = active
+        if active != nil {
+            startTimerUpdates()
         }
     }
     
@@ -130,7 +159,7 @@ public final class TimeTrackingViewModel: ObservableObject {
         await MainActor.run {
             configuration = config
             configuration.storageFolder = path
-            allEntries = entries
+            applyLoadedEntries(entries)
             errorMessage = nil
         }
     }
@@ -175,6 +204,7 @@ public final class TimeTrackingViewModel: ObservableObject {
     public func cancelTracking() {
         currentEntry = nil
         stopTimerUpdates()
+        saveEntries()
         objectWillChange.send()
     }
     
@@ -194,7 +224,12 @@ public final class TimeTrackingViewModel: ObservableObject {
     private func saveEntries() {
         guard storageService.getStorageFolderURL() != nil else { return }
         do {
-            try storageService.saveTimeEntries(allEntries)
+            // Persist in-progress entry so other devices (e.g. iOS) see the active timer and show live elapsed time.
+            var toSave = allEntries
+            if let cur = currentEntry {
+                toSave.insert(cur, at: 0)
+            }
+            try storageService.saveTimeEntries(toSave)
         } catch {
             errorMessage = error.localizedDescription
         }
@@ -244,6 +279,17 @@ public final class TimeTrackingViewModel: ObservableObject {
     
     public func requestNotificationPermissions() async -> Bool {
         await notificationService.requestAuthorization()
+    }
+    
+    // MARK: - iOS helpers
+    
+    public func clearError() {
+        errorMessage = nil
+    }
+    
+    /// Sync state from app group (e.g. after returning from widget).
+    public func syncFromWidget() {
+        loadFromStorageIfAvailable()
     }
 }
 

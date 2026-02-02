@@ -37,6 +37,9 @@ public struct ConfigurationView: View {
             
             // Advanced Section
             advancedSection
+            
+            // About & Support Section
+            aboutSection
         }
         .navigationTitle("Settings")
         #if os(iOS)
@@ -186,6 +189,15 @@ public struct ConfigurationView: View {
             Toggle("Confirm before sending", isOn: $config.confirmBeforeSending)
         } header: {
             Label("Advanced", systemImage: "gearshape.2")
+        }
+    }
+    
+    private var aboutSection: some View {
+        Section {
+            Link("View on GitHub", destination: URL(string: "https://github.com/gogrinimish/SimpleTimesheet")!)
+            Link("Buy Me a Coffee", destination: URL(string: "https://buymeacoffee.com/hwrxt65o5i")!)
+        } header: {
+            Label("About & Support", systemImage: "heart")
         }
     }
     
