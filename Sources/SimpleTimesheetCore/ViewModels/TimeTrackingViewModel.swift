@@ -3,6 +3,9 @@ import Combine
 #if canImport(SkipFoundation)
 import SkipFoundation
 #endif
+#if canImport(WidgetKit)
+import WidgetKit
+#endif
 
 #if !SKIP
 
@@ -25,7 +28,11 @@ public final class TimeTrackingViewModel: ObservableObject {
     @Published public var showStopDialogFromWidget: Bool = false
     
     private var timerCancellable: AnyCancellable?
+    private var fileSyncCancellable: AnyCancellable?
     private let calendar: Calendar
+    
+    /// Interval for checking if storage files changed (cross-device sync)
+    private let fileSyncInterval: TimeInterval = 5.0
     
     // MARK: - Computed Properties
     
@@ -151,10 +158,22 @@ public final class TimeTrackingViewModel: ObservableObject {
         if active != nil {
             startTimerUpdates()
         }
+        // Keep widget in sync
+        syncStateToWidget()
     }
     
     public func setupStorage(path: String) async throws {
         try storageService.setStorageFolder(path)
+        try await finishSetupStorage(path: path)
+    }
+
+    /// Set up storage using a URL (e.g. security-scoped URL from document picker on iOS).
+    public func setupStorage(url: URL) async throws {
+        try storageService.setStorageFolder(url: url)
+        try await finishSetupStorage(path: url.path)
+    }
+
+    private func finishSetupStorage(path: String) async throws {
         let config = try storageService.loadConfiguration()
         let entries = try storageService.loadTimeEntries()
         await MainActor.run {
@@ -181,7 +200,60 @@ public final class TimeTrackingViewModel: ObservableObject {
         timerCancellable = nil
     }
     
+    // MARK: - Periodic File Sync (Cross-Device)
+    
+    /// Starts periodic polling of storage files to detect changes from other devices.
+    /// Call this when the app becomes active or visible.
+    public func startPeriodicFileSync() {
+        guard fileSyncCancellable == nil else { return }
+        fileSyncCancellable = Timer.publish(every: fileSyncInterval, on: .main, in: .common)
+            .autoconnect()
+            .sink { [weak self] _ in
+                self?.checkForExternalChanges()
+            }
+    }
+    
+    /// Stops periodic file sync polling.
+    /// Call this when the app goes to background or is not visible.
+    public func stopPeriodicFileSync() {
+        fileSyncCancellable?.cancel()
+        fileSyncCancellable = nil
+    }
+    
+    /// Checks storage for changes made by other devices and updates state if needed.
+    private func checkForExternalChanges() {
+        guard storageService.getStorageFolderURL() != nil else { return }
+        do {
+            let loadedEntries = try storageService.loadTimeEntries()
+            let loadedInProgress = loadedEntries.first { $0.endTime == nil }
+            
+            // Check if timer state changed externally
+            if let current = currentEntry {
+                // We have a timer running - check if it was stopped externally
+                if let loaded = loadedEntries.first(where: { $0.id == current.id }) {
+                    if loaded.endTime != nil {
+                        // Timer was stopped on another device - update our state
+                        applyLoadedEntries(loadedEntries)
+                    }
+                }
+            } else if loadedInProgress != nil {
+                // We don't have a timer but one was started externally
+                applyLoadedEntries(loadedEntries)
+            }
+            
+            // Also check if completed entries changed (e.g., edits from another device)
+            let loadedCompletedCount = loadedEntries.filter { $0.endTime != nil }.count
+            if loadedCompletedCount != allEntries.count {
+                applyLoadedEntries(loadedEntries)
+            }
+        } catch {
+            // Silently ignore sync errors to avoid spamming the user
+        }
+    }
+    
     // MARK: - Actions
+    
+    private let sharedDefaults = UserDefaults(suiteName: "group.com.simpletimesheet.shared")
     
     public func startClock() {
         guard currentEntry == nil else { return }
@@ -189,6 +261,7 @@ public final class TimeTrackingViewModel: ObservableObject {
         currentEntry = entry
         startTimerUpdates()
         saveEntries()
+        syncStateToWidget()
     }
     
     public func stopClock(description: String, projectName: String? = nil) {
@@ -201,13 +274,43 @@ public final class TimeTrackingViewModel: ObservableObject {
         allEntries.append(entry)
         allEntries.sort { $0.startTime > $1.startTime }
         saveEntries()
+        syncStateToWidget()
     }
     
     public func cancelTracking() {
         currentEntry = nil
         stopTimerUpdates()
         saveEntries()
+        syncStateToWidget()
         objectWillChange.send()
+    }
+    
+    /// Syncs timer state to shared UserDefaults so widgets can read it.
+    private func syncStateToWidget() {
+        guard let defaults = sharedDefaults else { return }
+        if let entry = currentEntry {
+            defaults.set(true, forKey: "isTracking")
+            defaults.set(entry.startTime, forKey: "trackingStartTime")
+        } else {
+            defaults.set(false, forKey: "isTracking")
+            defaults.removeObject(forKey: "trackingStartTime")
+        }
+        // Update totals for widget display
+        let todayTotal = todayEntries.totalDuration
+        defaults.set(todayTotal, forKey: "todayTotal")
+        defaults.set(todayEntries.count, forKey: "todayEntryCount")
+        // Week total
+        let cal = calendar
+        let now = Date()
+        if let weekStart = cal.date(from: cal.dateComponents([.yearForWeekOfYear, .weekOfYear], from: now)),
+           let weekEnd = cal.date(byAdding: .day, value: 6, to: weekStart) {
+            let weekTotal = allEntries.entries(from: weekStart, to: weekEnd).totalDuration
+            defaults.set(weekTotal, forKey: "weekTotal")
+        }
+        // Tell iOS widgets to refresh immediately
+        #if canImport(WidgetKit)
+        WidgetCenter.shared.reloadAllTimelines()
+        #endif
     }
     
     public func deleteEntry(_ entry: TimeEntry) {
@@ -309,30 +412,26 @@ public final class TimeTrackingViewModel: ObservableObject {
         cal.timeZone = configuration.timezone
         let now = Date()
         let tz = configuration.timezone
-        do {
-            func saveIfDue(periodStart: Date, periodEnd: Date) {
-                guard let due = notificationDueDate(periodStart: periodStart, periodEnd: periodEnd), now >= due else { return }
-                guard !storageService.timesheetFileExistsForPeriod(periodStart: periodStart, periodEnd: periodEnd, timeZone: tz) else { return }
-                let entries = allEntries.entries(from: periodStart, to: periodEnd)
-                let timesheet = Timesheet(periodStart: periodStart, periodEnd: periodEnd, entries: entries, status: .draft)
-                try? storageService.saveTimesheetForPeriod(timesheet, timeZone: tz)
-            }
-            let (curStart, curEnd) = currentPeriodBounds(now: now)
-            saveIfDue(periodStart: curStart, periodEnd: curEnd)
-            let prevEnd = cal.date(byAdding: .day, value: -1, to: curStart)!
-            let prevStart: Date
-            switch configuration.timesheetPeriod {
-            case .weekly:
-                prevStart = cal.date(byAdding: .day, value: -7, to: curStart)!
-            case .biweekly:
-                prevStart = cal.date(byAdding: .day, value: -14, to: curStart)!
-            case .monthly:
-                prevStart = cal.date(byAdding: DateComponents(month: -1), to: curStart)!
-            }
-            saveIfDue(periodStart: prevStart, periodEnd: prevEnd)
-        } catch {
-            errorMessage = error.localizedDescription
+        func saveIfDue(periodStart: Date, periodEnd: Date) {
+            guard let due = notificationDueDate(periodStart: periodStart, periodEnd: periodEnd), now >= due else { return }
+            guard !storageService.timesheetFileExistsForPeriod(periodStart: periodStart, periodEnd: periodEnd, timeZone: tz) else { return }
+            let entries = allEntries.entries(from: periodStart, to: periodEnd)
+            let timesheet = Timesheet(periodStart: periodStart, periodEnd: periodEnd, entries: entries, status: .draft)
+            try? storageService.saveTimesheetForPeriod(timesheet, timeZone: tz)
         }
+        let (curStart, curEnd) = currentPeriodBounds(now: now)
+        saveIfDue(periodStart: curStart, periodEnd: curEnd)
+        let prevEnd = cal.date(byAdding: .day, value: -1, to: curStart)!
+        let prevStart: Date
+        switch configuration.timesheetPeriod {
+        case .weekly:
+            prevStart = cal.date(byAdding: .day, value: -7, to: curStart)!
+        case .biweekly:
+            prevStart = cal.date(byAdding: .day, value: -14, to: curStart)!
+        case .monthly:
+            prevStart = cal.date(byAdding: DateComponents(month: -1), to: curStart)!
+        }
+        saveIfDue(periodStart: prevStart, periodEnd: prevEnd)
     }
     
     // MARK: - Notifications
@@ -349,8 +448,23 @@ public final class TimeTrackingViewModel: ObservableObject {
     
     /// Sync state from app group (e.g. after returning from widget).
     public func syncFromWidget() {
+        // First check if widget started a timer we don't know about
+        if let defaults = sharedDefaults,
+           defaults.bool(forKey: "isTracking"),
+           currentEntry == nil,
+           let startTime = defaults.object(forKey: "trackingStartTime") as? Date {
+            // Widget started a timer - create an entry for it
+            let entry = TimeEntry(startTime: startTime, description: "")
+            currentEntry = entry
+            startTimerUpdates()
+            saveEntries()
+        }
+        // Then reload from storage to get any file changes
         loadFromStorageIfAvailable()
+        // Update widget with our current state
+        syncStateToWidget()
     }
 }
+
 
 #endif

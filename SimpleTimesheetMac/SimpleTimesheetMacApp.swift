@@ -6,6 +6,11 @@ struct SimpleTimesheetMacApp: App {
     @StateObject private var viewModel = TimeTrackingViewModel()
     @Environment(\.openSettings) private var openSettings
     
+    init() {
+        // Restore security-scoped bookmark on app launch
+        restoreStorageFolderAccess()
+    }
+    
     var body: some Scene {
         // Settings window
         Settings {
@@ -19,6 +24,44 @@ struct SimpleTimesheetMacApp: App {
             MenuBarLabel(viewModel: viewModel)
         }
         .menuBarExtraStyle(.window)
+    }
+    
+    /// Restores access to the previously selected storage folder using a security-scoped bookmark.
+    private func restoreStorageFolderAccess() {
+        let sharedDefaults = UserDefaults(suiteName: "group.com.simpletimesheet.shared") ?? .standard
+        guard let bookmarkData = sharedDefaults.data(forKey: "storageFolderBookmark") else {
+            return
+        }
+        do {
+            var isStale = false
+            let url = try URL(
+                resolvingBookmarkData: bookmarkData,
+                options: .withSecurityScope,
+                relativeTo: nil,
+                bookmarkDataIsStale: &isStale
+            )
+            // Start accessing the security-scoped resource
+            guard url.startAccessingSecurityScopedResource() else {
+                print("Failed to start accessing security-scoped resource")
+                return
+            }
+            // IMPORTANT: Set the storage folder on the shared StorageService
+            // This ensures the ViewModel uses the correct folder when it initializes
+            try? StorageService.shared.setStorageFolder(url: url)
+            
+            // If bookmark is stale, save a fresh one
+            if isStale {
+                if let newBookmark = try? url.bookmarkData(
+                    options: .withSecurityScope,
+                    includingResourceValuesForKeys: nil,
+                    relativeTo: nil
+                ) {
+                    sharedDefaults.set(newBookmark, forKey: "storageFolderBookmark")
+                }
+            }
+        } catch {
+            print("Failed to resolve bookmark: \(error)")
+        }
     }
 }
 

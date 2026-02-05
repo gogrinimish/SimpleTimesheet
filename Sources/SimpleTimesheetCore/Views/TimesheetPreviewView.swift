@@ -248,9 +248,9 @@ struct TimesheetEntryRow: View {
     var body: some View {
         HStack(alignment: .top) {
             VStack(alignment: .leading, spacing: 2) {
-                Text(entry.description.isEmpty ? "No description" : entry.description)
+                Text(entry.displayDescription ?? "No description")
                     .font(.subheadline)
-                    .foregroundStyle(entry.description.isEmpty ? .secondary : .primary)
+                    .foregroundStyle(entry.displayDescription == nil ? .secondary : .primary)
                 
                 Text(formatTimeRange())
                     .font(.caption)

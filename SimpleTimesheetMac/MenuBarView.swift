@@ -20,7 +20,10 @@ struct MenuBarView: View {
         }
         .frame(width: 340)
         .onAppear {
+            viewModel.syncFromWidget()
             viewModel.saveTimesheetForCurrentPeriodIfDue()
+            // Start periodic sync - runs continuously while macOS app is active
+            viewModel.startPeriodicFileSync()
         }
     }
     
@@ -472,10 +475,10 @@ struct TimesheetInlineView: View {
                                 
                                 ForEach(grouped[date] ?? []) { entry in
                                     HStack {
-                                        Text(entry.description.isEmpty ? "No description" : entry.description)
+                                        Text(entry.displayDescription ?? "No description")
                                             .font(.caption)
                                             .lineLimit(1)
-                                            .foregroundStyle(entry.description.isEmpty ? .secondary : .primary)
+                                            .foregroundStyle(entry.displayDescription == nil ? .secondary : .primary)
                                         Spacer()
                                         Text(entry.formattedDuration)
                                             .font(.caption)
@@ -545,10 +548,10 @@ struct MenuBarEntryRow: View {
     var body: some View {
         HStack {
             VStack(alignment: .leading, spacing: 2) {
-                Text(entry.description.isEmpty ? "No description" : entry.description)
+                Text(entry.displayDescription ?? "No description")
                     .font(.caption)
                     .lineLimit(1)
-                    .foregroundStyle(entry.description.isEmpty ? .secondary : .primary)
+                    .foregroundStyle(entry.displayDescription == nil ? .secondary : .primary)
                 
                 Text(formatTimeRange())
                     .font(.caption2)
@@ -599,9 +602,8 @@ struct StopTimerInline: View {
                     .font(.caption)
                     .foregroundStyle(.secondary)
                 
-                TextField("What did you work on?", text: $description, axis: .vertical)
+                TextField("What did you work on?", text: $description)
                     .textFieldStyle(.roundedBorder)
-                    .lineLimit(3)
             }
             
             VStack(alignment: .leading, spacing: 8) {

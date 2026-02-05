@@ -153,9 +153,9 @@ public struct EntryRowView: View {
             // Content
             VStack(alignment: .leading, spacing: 4) {
                 HStack {
-                    Text(entry.description.isEmpty ? "No description" : entry.description)
+                    Text(entry.displayDescription ?? "No description")
                         .font(.body)
-                        .foregroundStyle(entry.description.isEmpty ? .secondary : .primary)
+                        .foregroundStyle(entry.displayDescription == nil ? .secondary : .primary)
                         .lineLimit(2)
                     
                     Spacer()

@@ -22,6 +22,8 @@ public protocol StorageServiceProtocol {
     func getStorageFolderURL() -> URL?
     func isValidStorageFolder(_ path: String) -> Bool
     func setStorageFolder(_ path: String) throws
+    /// Set storage from a URL (e.g. security-scoped URL from document picker on iOS).
+    func setStorageFolder(url: URL) throws
 }
 
 /// Service for managing file-based storage
@@ -49,10 +51,12 @@ public class StorageService: StorageServiceProtocol {
     /// Set the storage folder path
     public func setStorageFolder(_ path: String) throws {
         let url = URL(fileURLWithPath: path)
-        
-        // Create folder structure if needed
+        try setStorageFolder(url: url)
+    }
+    
+    /// Set the storage folder from a URL (use this with security-scoped URLs on iOS).
+    public func setStorageFolder(url: URL) throws {
         try createFolderStructure(at: url)
-        
         self.storageFolderURL = url
     }
     
@@ -215,7 +219,7 @@ public class StorageService: StorageServiceProtocol {
     }
     
     public func saveTimesheetForPeriod(_ timesheet: Timesheet, timeZone: TimeZone) throws {
-        guard let folderURL = storageFolderURL else {
+        guard storageFolderURL != nil else {
             throw StorageError.noStorageFolder
         }
         guard let url = periodTimesheetURL(periodStart: timesheet.periodStart, periodEnd: timesheet.periodEnd, timeZone: timeZone) else {

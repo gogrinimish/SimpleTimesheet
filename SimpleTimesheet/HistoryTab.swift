@@ -233,9 +233,9 @@ struct HistoryEntryRow: View {
             
             // Content
             VStack(alignment: .leading, spacing: 4) {
-                Text(entry.description.isEmpty ? "No description" : entry.description)
+                Text(entry.displayDescription ?? "No description")
                     .font(.body)
-                    .foregroundStyle(entry.description.isEmpty ? .secondary : .primary)
+                    .foregroundStyle(entry.displayDescription == nil ? .secondary : .primary)
                     .lineLimit(2)
                 
                 HStack(spacing: 8) {

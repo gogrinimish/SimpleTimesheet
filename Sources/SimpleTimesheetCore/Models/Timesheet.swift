@@ -105,7 +105,7 @@ public struct Timesheet: Codable, Identifiable, Hashable {
             summary += "\n\(dateFormatter.string(from: date)):\n"
             
             for entry in dayEntries {
-                summary += "  - \(entry.formattedDuration): \(entry.description.isEmpty ? "No description" : entry.description)\n"
+                summary += "  - \(entry.formattedDuration): \(entry.displayDescription ?? "No description")\n"
             }
             
             let dayTotal = dayEntries.totalDuration / 3600.0

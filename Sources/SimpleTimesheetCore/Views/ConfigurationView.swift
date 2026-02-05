@@ -218,26 +218,30 @@ public struct ConfigurationView: View {
             if let url = urls.first {
                 // Start accessing security-scoped resource
                 guard url.startAccessingSecurityScopedResource() else { return }
-                defer { url.stopAccessingSecurityScopedResource() }
+                // Don't stop access - keep it for the session
                 
                 config.storageFolder = url.path
                 
-                // Save bookmark for future access (macOS only - uses security-scoped bookmarks)
+                // Save bookmark for future access to shared app group
+                let sharedDefaults = UserDefaults(suiteName: "group.com.simpletimesheet.shared") ?? .standard
                 #if os(macOS)
                 if let bookmarkData = try? url.bookmarkData(
                     options: .withSecurityScope,
                     includingResourceValuesForKeys: nil,
                     relativeTo: nil
                 ) {
-                    UserDefaults.standard.set(bookmarkData, forKey: "storageFolderBookmark")
+                    sharedDefaults.set(bookmarkData, forKey: "storageFolderBookmark")
+                    sharedDefaults.set(url.path, forKey: "storageFolderPath")
                 }
                 #else
                 // iOS uses different file access patterns via document picker
                 if let bookmarkData = try? url.bookmarkData(
+                    options: .minimalBookmark,
                     includingResourceValuesForKeys: nil,
                     relativeTo: nil
                 ) {
-                    UserDefaults.standard.set(bookmarkData, forKey: "storageFolderBookmark")
+                    sharedDefaults.set(bookmarkData, forKey: "storageFolderBookmark")
+                    sharedDefaults.set(url.path, forKey: "storageFolderPath")
                 }
                 #endif
             }

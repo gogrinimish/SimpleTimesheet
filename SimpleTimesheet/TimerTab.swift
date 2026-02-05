@@ -194,10 +194,10 @@ struct CompactEntryRow: View {
     var body: some View {
         HStack {
             VStack(alignment: .leading, spacing: 4) {
-                Text(entry.description.isEmpty ? "No description" : entry.description)
+                Text(entry.displayDescription ?? "No description")
                     .font(.subheadline)
                     .lineLimit(1)
-                    .foregroundStyle(entry.description.isEmpty ? .secondary : .primary)
+                    .foregroundStyle(entry.displayDescription == nil ? .secondary : .primary)
                 
                 HStack(spacing: 8) {
                     Text(formatTimeRange())

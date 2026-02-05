@@ -48,6 +48,33 @@ A local-first, cross-platform time tracking app for macOS, iOS, and Android (pla
 - **iOS**: Widgets, long-press actions, and notifications
 - **Android**: PLANNED
 
+### Cross-Device Sync
+
+SimpleTimesheet keeps your data in sync across devices using your cloud storage folder (iCloud, Google Drive, OneDrive). Here's how sync works:
+
+#### Same-Device Sync (iOS App ↔ Widget)
+
+| Trigger | Update Speed |
+|---------|--------------|
+| Start/stop timer in main app | **Immediate** (via WidgetKit reload) |
+| Start timer from widget | **Immediate** (widget already knows) |
+| Timeline refresh (backup) | Every 60 seconds when tracking, every 5 minutes when idle |
+
+#### Cross-Device Sync (macOS ↔ iOS)
+
+| Action | Other Device Update |
+|--------|---------------------|
+| Start/stop timer | 5-30 seconds (depends on cloud sync speed) |
+| Edit entries | 5-30 seconds (depends on cloud sync speed) |
+
+**How it works:**
+- Apps poll storage files every **5 seconds** to detect changes
+- When a change is detected, the app updates its state automatically
+- Cloud sync speed (iCloud, Google Drive, etc.) is the main factor in cross-device delay
+- Both devices must be online for sync to occur
+
+**Note:** Cross-device sync relies on your cloud storage provider. Sync speed varies based on network conditions, device state (active vs. background), and the provider's infrastructure. Typical delays are 5-30 seconds on the same WiFi network.
+
 
 ## Installation
 

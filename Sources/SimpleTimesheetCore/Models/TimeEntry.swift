@@ -35,6 +35,18 @@ public struct TimeEntry: Codable, Identifiable, Hashable {
         endTime == nil
     }
     
+    /// Returns the best available description for display purposes.
+    /// Prefers `description`, falls back to `projectName`, or returns nil if both are empty.
+    public var displayDescription: String? {
+        if !description.isEmpty {
+            return description
+        }
+        if let project = projectName, !project.isEmpty {
+            return project
+        }
+        return nil
+    }
+    
     public init(
         id: UUID = UUID(),
         startTime: Date = Date(),

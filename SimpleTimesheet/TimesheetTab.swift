@@ -267,7 +267,7 @@ struct TimesheetTab: View {
             body += "\n\(dayFormatter.string(from: date)):\n"
             
             for entry in dayEntries {
-                let desc = entry.description.isEmpty ? "No description" : entry.description
+                let desc = entry.displayDescription ?? "No description"
                 body += "  • \(entry.formattedDuration): \(desc)\n"
             }
             
