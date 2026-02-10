@@ -13,7 +13,7 @@
 		17CF57292F2B1E2800C4F2C0 /* StorageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4000001006 /* StorageService.swift */; };
 		17CF572A2F2B1E2800C4F2C0 /* EmailService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4000001008 /* EmailService.swift */; };
 		17CF572B2F2B1E2800C4F2C0 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4000001010 /* NotificationService.swift */; };
-		17CF572C2F2B1E2800C4F2C0 /* TimeTrackingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4000001012 /* TimeTrackingViewModel.swift */; };
+		17CF572C2F2B1E2800C4F2C0 /* Sources/LocalHoursCore/ViewModels/TimeTrackingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4000001012 /* Sources/LocalHoursCore/ViewModels/TimeTrackingViewModel.swift */; };
 		17CF572D2F2B1E2800C4F2C0 /* TimerDisplayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4000001014 /* TimerDisplayView.swift */; };
 		17CF572E2F2B1E2800C4F2C0 /* EntryListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4000001016 /* EntryListView.swift */; };
 		17CF572F2F2B1E2800C4F2C0 /* EntryDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4000001018 /* EntryDetailView.swift */; };
@@ -45,14 +45,14 @@
 		A4000001007 /* StorageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4000001006 /* StorageService.swift */; };
 		A4000001009 /* EmailService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4000001008 /* EmailService.swift */; };
 		A4000001011 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4000001010 /* NotificationService.swift */; };
-		A4000001013 /* TimeTrackingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4000001012 /* TimeTrackingViewModel.swift */; };
+		A4000001013 /* Sources/LocalHoursCore/ViewModels/TimeTrackingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4000001012 /* Sources/LocalHoursCore/ViewModels/TimeTrackingViewModel.swift */; };
 		A4000001015 /* TimerDisplayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4000001014 /* TimerDisplayView.swift */; };
 		A4000001017 /* EntryListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4000001016 /* EntryListView.swift */; };
 		A4000001019 /* EntryDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4000001018 /* EntryDetailView.swift */; };
 		A4000001021 /* ConfigurationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4000001020 /* ConfigurationView.swift */; };
 		A4000001023 /* TimesheetPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4000001022 /* TimesheetPreviewView.swift */; };
 		A4000001025 /* PlatformServices.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4000001024 /* PlatformServices.swift */; };
-		A5000000001 /* LocalHoursWidgetExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = A3000000000 /* LocalHoursWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		A5000000001 /* LocalHoursWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = A3000000000 /* LocalHoursWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -66,15 +66,15 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		A5000000003 /* Embed App Extensions */ = {
+		A5000000003 /* Embed Foundation Extensions */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				A5000000001 /* LocalHoursWidgetExtension.appex in Embed App Extensions */,
+				A5000000001 /* LocalHoursWidgetExtension.appex in Embed Foundation Extensions */,
 			);
-			name = "Embed App Extensions";
+			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
@@ -90,7 +90,7 @@
 		A1000001012 /* AppIntents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIntents.swift; sourceTree = "<group>"; };
 		A1000001014 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A1000001016 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		A2000000000 /* LocalHoursMac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LocalHoursMac.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A2000000000 /* Local Hours.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Local Hours.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A2000001000 /* LocalHoursMacApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalHoursMacApp.swift; sourceTree = "<group>"; };
 		A2000001002 /* MenuBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarView.swift; sourceTree = "<group>"; };
 		A2000001004 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
@@ -106,7 +106,7 @@
 		A4000001006 /* StorageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageService.swift; sourceTree = "<group>"; };
 		A4000001008 /* EmailService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailService.swift; sourceTree = "<group>"; };
 		A4000001010 /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
-		A4000001012 /* TimeTrackingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Sources/LocalHoursCore/ViewModels/TimeTrackingViewModel.swift"; sourceTree = SOURCE_ROOT; };
+		A4000001012 /* Sources/LocalHoursCore/ViewModels/TimeTrackingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/LocalHoursCore/ViewModels/TimeTrackingViewModel.swift; sourceTree = SOURCE_ROOT; };
 		A4000001014 /* TimerDisplayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerDisplayView.swift; sourceTree = "<group>"; };
 		A4000001016 /* EntryListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntryListView.swift; sourceTree = "<group>"; };
 		A4000001018 /* EntryDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntryDetailView.swift; sourceTree = "<group>"; };
@@ -189,7 +189,7 @@
 			isa = PBXGroup;
 			children = (
 				A1000000000 /* LocalHours.app */,
-				A2000000000 /* LocalHoursMac.app */,
+				A2000000000 /* Local Hours.app */,
 				A3000000000 /* LocalHoursWidgetExtension.appex */,
 			);
 			name = Products;
@@ -230,7 +230,7 @@
 		A0000000010 /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
-				A4000001012 /* TimeTrackingViewModel.swift */,
+				A4000001012 /* Sources/LocalHoursCore/ViewModels/TimeTrackingViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -264,7 +264,7 @@
 			buildPhases = (
 				A1000000002 /* Sources */,
 				A1000000003 /* Resources */,
-				A5000000003 /* Embed App Extensions */,
+				A5000000003 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
@@ -289,7 +289,7 @@
 			);
 			name = LocalHoursMac;
 			productName = LocalHoursMac;
-			productReference = A2000000000 /* LocalHoursMac.app */;
+			productReference = A2000000000 /* Local Hours.app */;
 			productType = "com.apple.product-type.application";
 		};
 		A3000000001 /* LocalHoursWidgetExtension */ = {
@@ -316,7 +316,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1600;
-				LastUpgradeCheck = 1600;
+				LastUpgradeCheck = 2620;
 				TargetAttributes = {
 					A1000000001 = {
 						CreatedOnToolsVersion = 16.0;
@@ -394,7 +394,7 @@
 				A4000001007 /* StorageService.swift in Sources */,
 				A4000001009 /* EmailService.swift in Sources */,
 				A4000001011 /* NotificationService.swift in Sources */,
-				A4000001013 /* TimeTrackingViewModel.swift in Sources */,
+				A4000001013 /* Sources/LocalHoursCore/ViewModels/TimeTrackingViewModel.swift in Sources */,
 				A4000001015 /* TimerDisplayView.swift in Sources */,
 				A4000001017 /* EntryListView.swift in Sources */,
 				A4000001019 /* EntryDetailView.swift in Sources */,
@@ -417,7 +417,7 @@
 				17CF57292F2B1E2800C4F2C0 /* StorageService.swift in Sources */,
 				17CF572A2F2B1E2800C4F2C0 /* EmailService.swift in Sources */,
 				17CF572B2F2B1E2800C4F2C0 /* NotificationService.swift in Sources */,
-				17CF572C2F2B1E2800C4F2C0 /* TimeTrackingViewModel.swift in Sources */,
+				17CF572C2F2B1E2800C4F2C0 /* Sources/LocalHoursCore/ViewModels/TimeTrackingViewModel.swift in Sources */,
 				17CF572D2F2B1E2800C4F2C0 /* TimerDisplayView.swift in Sources */,
 				17CF572E2F2B1E2800C4F2C0 /* EntryListView.swift in Sources */,
 				17CF572F2F2B1E2800C4F2C0 /* EntryDetailView.swift in Sources */,
@@ -485,7 +485,9 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = Q8GTNJD9W6;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -507,6 +509,7 @@
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -546,7 +549,9 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = Q8GTNJD9W6;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -561,6 +566,7 @@
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 			};
 			name = Release;
@@ -568,13 +574,11 @@
 		A1000000011 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = LocalHours/LocalHours.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = Q8GTNJD9W6;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = LocalHours/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -600,13 +604,11 @@
 		A1000000012 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = LocalHours/LocalHours.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = Q8GTNJD9W6;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = LocalHours/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -641,7 +643,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = Q8GTNJD9W6;
+				DEAD_CODE_STRIPPING = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_RESOURCE_ACCESS_AUDIO_INPUT = NO;
 				ENABLE_RESOURCE_ACCESS_CALENDARS = YES;
@@ -651,6 +653,7 @@
 				ENABLE_RESOURCE_ACCESS_PHOTO_LIBRARY = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = LocalHoursMac/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Local Hours";
 				INFOPLIST_KEY_LSUIElement = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -660,7 +663,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.localhours.mac;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "Local Hours";
 				RUNTIME_EXCEPTION_ALLOW_DYLD_ENVIRONMENT_VARIABLES = NO;
 				RUNTIME_EXCEPTION_ALLOW_JIT = NO;
 				RUNTIME_EXCEPTION_ALLOW_UNSIGNED_EXECUTABLE_MEMORY = NO;
@@ -684,7 +687,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = Q8GTNJD9W6;
+				DEAD_CODE_STRIPPING = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_RESOURCE_ACCESS_AUDIO_INPUT = NO;
 				ENABLE_RESOURCE_ACCESS_CALENDARS = YES;
@@ -694,6 +697,7 @@
 				ENABLE_RESOURCE_ACCESS_PHOTO_LIBRARY = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = LocalHoursMac/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Local Hours";
 				INFOPLIST_KEY_LSUIElement = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -703,7 +707,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.localhours.mac;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "Local Hours";
 				RUNTIME_EXCEPTION_ALLOW_DYLD_ENVIRONMENT_VARIABLES = NO;
 				RUNTIME_EXCEPTION_ALLOW_JIT = NO;
 				RUNTIME_EXCEPTION_ALLOW_UNSIGNED_EXECUTABLE_MEMORY = NO;
@@ -724,7 +728,6 @@
 				CODE_SIGN_ENTITLEMENTS = LocalHoursWidget/LocalHoursWidgetExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = Q8GTNJD9W6;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = LocalHoursWidget/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = LocalHoursWidget;
@@ -754,7 +757,6 @@
 				CODE_SIGN_ENTITLEMENTS = LocalHoursWidget/LocalHoursWidgetExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = Q8GTNJD9W6;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = LocalHoursWidget/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = LocalHoursWidget;
