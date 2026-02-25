@@ -109,9 +109,20 @@
   
   .cta-row {
     display: flex;
-    gap: 12px;
+    gap: 16px;
     justify-content: center;
-    margin-bottom: 28px;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+
+  .app-store-badge img {
+    display: block;
+  }
+
+  .hero-platforms {
+    font-size: 0.9rem;
+    color: var(--muted);
+    margin-bottom: 16px;
   }
   
   .primary-cta,
@@ -238,6 +249,23 @@
     border: 1px solid var(--border);
     border-radius: 14px;
     padding: 22px;
+  }
+
+  .platform-link {
+    display: inline-block;
+    margin-top: 10px;
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+
+  .install-primary {
+    text-align: center;
+    margin-bottom: 24px;
+  }
+
+  .install-primary .app-store-badge {
+    display: inline-block;
+    margin-bottom: 12px;
   }
   
   /* =========================

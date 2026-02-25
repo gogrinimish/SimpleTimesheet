@@ -7,6 +7,8 @@
 
 A local-first, cross-platform time tracking app for macOS, iOS, and Android (planned). Track your hours, generate timesheets, and email them to approvers — all without accounts, servers, or data lock-in.
 
+[![Download on the App Store](https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg)](https://apps.apple.com/us/app/local-hours-simple-timesheet/id6758984365)
+
 **Learn more:** [Local Hours website](https://gogrinimish.github.io/LocalHours/)
 
 ## Screenshots
